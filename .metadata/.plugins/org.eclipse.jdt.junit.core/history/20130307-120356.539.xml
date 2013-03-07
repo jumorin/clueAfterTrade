@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="CRBoardInitTests" project="Experimen" tests="9" started="0" failures="0" errors="1" ignored="0">
+  <testsuite name="clueTests.CRBoardInitTests" incomplete="true">
+    <error>java.lang.Error: Unresolved compilation problems: 
+	sText cannot be resolved to a variable
+	sText cannot be resolved
+&#13;
+	at clueGame.Board.loadRoomConfig(Board.java:56)&#13;
+	at clueGame.Board.loadConfigFiles(Board.java:43)&#13;
+	at clueTests.CRBoardInitTests.setUp(CRBoardInitTests.java:31)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
+	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)&#13;
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)&#13;
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)&#13;
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:300)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)&#13;
+&#13;
+</error>
+    <testcase name="testBoardDimensions" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+    <testcase name="FourDoorDirections" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+    <testcase name="testNumberOfDoorways" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+    <testcase name="testCalcIndex" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+    <testcase name="testRoomInitials" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+    <testcase name="testBadColumns" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+    <testcase name="testBadRoomFormat" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+    <testcase name="testRooms" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+    <testcase name="testBadRoom" classname="clueTests.CRBoardInitTests" incomplete="true"/>
+  </testsuite>
+</testrun>

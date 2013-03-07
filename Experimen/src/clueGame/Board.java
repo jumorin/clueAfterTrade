@@ -24,6 +24,9 @@ public class Board {
 	private ArrayList<LinkedList<Integer>> adjList;
 	private ArrayList<Boolean> visited;
 	private Set targets;
+	
+	//Constructor which accepts the file names
+	//initializes ArrayLists and HashMaps
 	public Board(String fileName, String legendFile) {
 		this.mapFile = fileName;
 		this.legendFile = legendFile;
@@ -32,6 +35,8 @@ public class Board {
 		adjList = new ArrayList<LinkedList<Integer>>();
 		numCols = new ArrayList<Integer>();
 	}
+	
+	//file loading helper function
 	public void loadConfigFiles() {
 		try {
 			this.loadBoardConfig();
@@ -40,12 +45,16 @@ public class Board {
 			System.out.println("Bad config file");
 		}
 	}
+	
+	//loads the room .txt file
 	public void loadRoomConfig() throws BadConfigFormatException {
 		try {
+			String array[] = new String[2];
 			java.util.Scanner s = new Scanner(new File(legendFile));
 			while (s.hasNext()){
 				String line = s.nextLine();
-				rooms.put(line.charAt(0), line.substring(3, line.length()));
+				array = line.split(",");
+				rooms.put(array[0].charAt(0), array[1]);
 			}
 			s.close();
 		} catch (FileNotFoundException e) {
@@ -53,6 +62,8 @@ public class Board {
 			e.printStackTrace();
 		}
 	}
+	
+	//loads the room configuration .csv file
 	public void loadBoardConfig() throws BadConfigFormatException {
 		try {
 			java.util.Scanner s = new Scanner(new File(mapFile));
@@ -110,18 +121,23 @@ public class Board {
 		location = row * numColumns + col;
 		return location;
 	}
+
 	public RoomCell getRoomCellAt(int row, int col) {
 		if(cells.get(calcIndex(row, col)).isRoom())
 			return new RoomCell(cells.get(calcIndex(row, col)).initial);
 		else
 			return null;
 	}
+
+	/*
 	public RoomCell getRoomCellAt(int location) {
 		if(cells.get(location).isRoom())
 			return new RoomCell(cells.get(location).initial);
 		else
 			return null;
 	}
+	*/
+	
 	public BoardCell getCellAt(int location) {
 		return cells.get(location);
 	}
@@ -175,7 +191,9 @@ public class Board {
 		for(int i = 0; i < cells.size(); i++) {
 			//RoomCell cell = new RoomCell(cells.get(i).initial);
 			LinkedList<Integer> set = new LinkedList<Integer>();
+			//checks if the doorway is a room, if it is, the nested ifs will not be executed
 			if(!cells.get(i).isRoom() || !(new RoomCell(cells.get(i).initial).getDoorDirection().equals(DoorDirection.NONE))) {
+				//each case checks for either a walkway OR a specific door direction 
 				if( (i - numColumns >= 0) && ( (cells.get(i-numColumns).isWalkway() || (cells.get(i-numColumns).isDoorway() && new RoomCell(cells.get(i-numColumns).initial).getDoorDirection().equals(DoorDirection.DOWN)))) )
 					set.add(i-numColumns);
 				if( (i + numColumns < (numColumns * numRows) ) && ( cells.get(i+numColumns).isWalkway() || (cells.get(i+numColumns).isDoorway() && new RoomCell(cells.get(i+numColumns).initial).getDoorDirection().equals(DoorDirection.UP))) )

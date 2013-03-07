@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="CRBoardInitTests" project="Experimen" tests="9" started="9" failures="0" errors="0" ignored="0">
+  <testsuite name="clueTests.CRBoardInitTests" time="0.01">
+    <testcase name="testBoardDimensions" classname="clueTests.CRBoardInitTests" time="0.0"/>
+    <testcase name="FourDoorDirections" classname="clueTests.CRBoardInitTests" time="0.0"/>
+    <testcase name="testNumberOfDoorways" classname="clueTests.CRBoardInitTests" time="0.0"/>
+    <testcase name="testCalcIndex" classname="clueTests.CRBoardInitTests" time="0.0"/>
+    <testcase name="testRoomInitials" classname="clueTests.CRBoardInitTests" time="0.01"/>
+    <testcase name="testBadColumns" classname="clueTests.CRBoardInitTests" time="0.0"/>
+    <testcase name="testBadRoomFormat" classname="clueTests.CRBoardInitTests" time="0.0"/>
+    <testcase name="testRooms" classname="clueTests.CRBoardInitTests" time="0.0"/>
+    <testcase name="testBadRoom" classname="clueTests.CRBoardInitTests" time="0.0"/>
+  </testsuite>
+</testrun>
