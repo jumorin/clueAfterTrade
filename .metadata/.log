@@ -1596,3 +1596,25 @@ Caused by: java.lang.ClassNotFoundException: com.android.utils.ILogger
 	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
 	at java.lang.ClassLoader.loadClass(Unknown Source)
 	... 47 more
+!SESSION 2013-03-16 12:47:35.062 -----------------------------------------------
+eclipse.buildId=M20120914-1800
+java.version=1.7.0_10
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.jee.product F:\306\clueAfterTrade\Experimen\.project
+Command-line arguments:  -data F:\306\clueAfterTrade -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product F:\306\clueAfterTrade\Experimen\.project
+
+!ENTRY org.eclipse.core.resources 2 10035 2013-03-16 12:47:36.503
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.ui 4 4 2013-03-16 12:47:40.502
+!MESSAGE Unable to find Action Set: adt.actionSet.wizards
+
+!ENTRY org.eclipse.ui 4 4 2013-03-16 12:47:40.516
+!MESSAGE Unable to find Action Set: adt.actionSet.avdManager
+
+!ENTRY org.eclipse.ui 4 4 2013-03-16 12:47:40.561
+!MESSAGE Unable to find Action Set: adt.actionSet.lint
+
+!ENTRY org.eclipse.ui 4 4 2013-03-16 12:47:40.562
+!MESSAGE Unable to find Action Set: adt.actionSet.refactorings
