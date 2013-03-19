@@ -1,0 +1,13 @@
+package clueGame;
+
+public class Player {
+		String name;
+		
+		public Player(){
+			
+		}
+		
+		public Card disproveSuggestion(String person, String room, String weapon){
+			return new Card();
+		}
+}

@@ -1,0 +1,17 @@
+package clueGame;
+
+
+public class Card {
+	
+
+	public enum CardType {ROOM, WEAPON, PERSON}
+	
+	private String name;
+	//default constructor
+	public Card()
+	{
+		
+	}
+	
+	
+}

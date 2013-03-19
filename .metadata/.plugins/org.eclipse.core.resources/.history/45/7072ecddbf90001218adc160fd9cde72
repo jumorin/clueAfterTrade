@@ -1,0 +1,6 @@
+package clueGame;
+
+public class ComputerPlayer extends Player {
+	private char lastRoomVisited;
+	
+}
