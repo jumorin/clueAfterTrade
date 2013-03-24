@@ -1,0 +1,11 @@
+Conservatory
+Kitchen
+Ballroom
+Billiard room
+Library
+Study
+Dining room
+Lounge
+Hall
+Closet
+Walkway

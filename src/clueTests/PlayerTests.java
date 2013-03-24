@@ -2,6 +2,7 @@ package clueTests;
 
 import static org.junit.Assert.*;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import junit.framework.Assert;
@@ -11,37 +12,36 @@ import org.junit.Test;
 
 import clueGame.Card;
 import clueGame.Card.CardType;
+import clueGame.Board;
 import clueGame.ClueGame;
 import clueGame.Player;
 
 public class PlayerTests {
-	public ClueGame game;
+
+	ClueGame game;
+	
 	@Before
 	public void setUp() throws Exception {
-	
-		game = new ClueGame(/*FILES*/);
+		game = new ClueGame("ClueRooms.txt", "CluePlayers.txt", "ClueWeapons.txt"); 
 	}
 
 	@Test
 	public void loadPeopleTest(){
-		
-		//not sure about the names
+		//Test Names
 		Assert.assertTrue(game.getHuman().getName().equals("Professor Plum"));
-		Assert.assertTrue(game.getPlayer(1).getName().equals("Miss Scarlet"));
+		Assert.assertTrue(game.getPlayer(5).getName().equals("Miss Scarlet"));
 		Assert.assertTrue(game.getPlayer(2).getName().equals("Colonel Mustard"));
 		
-		//Color
-		//enum?
-		Assert.assertTrue(game.getHuman().getColor().equals("PURPLE"));
-		Assert.assertTrue(game.getPlayer(1).getColor().equals("RED"));
-		Assert.assertTrue(game.getPlayer(2).getColor().equals("YELLOW"));
+		//Test Colors
+		Assert.assertTrue(game.getHuman().getColor().equals(Color.MAGENTA));
+		Assert.assertTrue(game.getPlayer(5).getColor().equals(Color.RED));
+		Assert.assertTrue(game.getPlayer(2).getColor().equals(Color.YELLOW));
 		
 		
-		//update locations on board
-		Assert.assertEquals(0, game.getHuman().getStartLocation());
-		Assert.assertEquals(1, game.getPlayer(1).getStartLocation());
-		Assert.assertEquals(2, game.getPlayer(1).getStartLocation());
-		
+		//Test Start Locations
+		Assert.assertEquals(game.getBoard().calcIndex(19,24), game.getHuman().getStartLocation());
+		Assert.assertEquals(game.getBoard().calcIndex(24,10), game.getPlayer(5).getStartLocation());
+		Assert.assertEquals(game.getBoard().calcIndex(18,0), game.getPlayer(2).getStartLocation());
 	}
 	
 	//test the loading of the cards
@@ -49,7 +49,7 @@ public class PlayerTests {
 	public void testLoadCards(){
 		ArrayList<Card> deck = game.getDeck();
 		//find actual deck size
-		Assert.assertEquals(20, deck.size()+1);
+		Assert.assertEquals(21, deck.size());
 		Assert.assertEquals(6, game.getNumPersons());
 		Assert.assertEquals(6, game.getNumWeapon());
 		Assert.assertEquals(9, game.getNumRooms());
@@ -58,7 +58,6 @@ public class PlayerTests {
 		int hallCount = 0;
 		int revolverCount = 0;
 		for(Card a: game.getDeck()){
-			
 			if(a.getName().equals("Professor Plum")){
 				plumCount++;
 			}
@@ -71,8 +70,6 @@ public class PlayerTests {
 		}
 		
 		Assert.assertTrue(hallCount == 1 && revolverCount == 1 && plumCount == 1);
-		
-		
 	}
 	
 	
@@ -94,8 +91,5 @@ public class PlayerTests {
 		}
 		Assert.assertEquals(1, plumCount);
 		Assert.assertEquals(21, count); 
-		
-		
 	}
-
 }

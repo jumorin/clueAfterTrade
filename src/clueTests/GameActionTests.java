@@ -42,7 +42,7 @@ public class GameActionTests {
 	public void setUp() throws FileNotFoundException {
 		board = new Board("ClueMap.csv","legend.txt");
 		board.loadConfigFiles();
-		game = new ClueGame(); 
+		game = new ClueGame("ClueRooms.txt", "CluePeople.txt", "ClueWeapons.txt"); 
 	}
 	
 	@Test
@@ -221,7 +221,7 @@ public class GameActionTests {
 	public void queryAllPlayers() {
 		// Create a new ArrayList that can be used to ensure that all players are asked to disprove a suggestion
 		ArrayList<Player> ourPlayers = new ArrayList<Player>(); 
-		HumanPlayer me = new HumanPlayer(); 
+		HumanPlayer me = new HumanPlayer(game.getPlayer(0).getName(), game.getPlayer(0).getColor(), game.getPlayer(0).getStartLocation(), 0); 
 		
 		ArrayList<Card> someCards = new ArrayList<Card>(); 
 		someCards.add(plumCard);
