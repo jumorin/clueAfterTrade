@@ -1,5 +1,6 @@
 package clueGame;
 
+
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,12 +9,16 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-import sun.reflect.misc.FieldUtil;
-
 import clueGame.Card.CardType;
 
+import sun.reflect.misc.FieldUtil;
+
+
 public class ClueGame {
+	// Variables for the Class:
+	Random rand = new Random();
 	ArrayList<Card> cards;
+	ArrayList<Card> revealed;
 	ArrayList<Player> players;
 	private Card loadingCard;
 	private HumanPlayer human;
@@ -24,15 +29,15 @@ public class ClueGame {
 	//turn is index from 0-5
 	private int turn;
 
-	//Constructor
+	//ClueGame Constructor
 	public ClueGame(String rooms, String people, String weapons){
 		board = new Board("ClueMap.csv","legend.txt");
-		board.loadConfigFiles();
 
 		ArrayList<String> answer = new ArrayList<String>();
 
 		cards = new ArrayList<Card>();
 		players = new ArrayList<Player>(); 
+		revealed = new ArrayList<Card>();
 
 		this.roomFile = rooms; 
 		this.peopleFile = people; 
@@ -44,9 +49,7 @@ public class ClueGame {
 	}
 
 	// Deal the cards "randomly"
-	public void deal(){
-		Random rand = new Random();
-		
+	public void deal(){		
 		// Boolean arrays created to know when all the cards have been given to a player
 		boolean trueArray[] = new boolean[21];
 		boolean dealt[] = new boolean[21]; 
@@ -81,6 +84,7 @@ public class ClueGame {
 		}	
 	}
 
+	// Loads the Room File and adds Room Cards
 	public void loadRoomConfig() throws BadConfigFormatException {		
 		try {
 			java.util.Scanner s = new Scanner(new File(roomFile));
@@ -95,6 +99,7 @@ public class ClueGame {
 		}
 	}
 
+	// Loads the People File and adds People Cards
 	public void loadPeopleConfig() throws BadConfigFormatException {
 		Card loadingCard;
 		Player loadingPlayer; 
@@ -104,6 +109,7 @@ public class ClueGame {
 			String personArray[] = new String[4];
 
 			java.util.Scanner s = new Scanner(new File(peopleFile));
+			int index = 0;
 			while (s.hasNext()){
 				// Load the Name and Type of Player:
 				String line = s.nextLine();
@@ -116,8 +122,9 @@ public class ClueGame {
 
 				// Create the new player:
 				Color playerColor = convertColor(personArray[1]);
-				loadingPlayer = new Player(personArray[0], playerColor, board.calcIndex(row, column));
+				loadingPlayer = new Player(personArray[0], playerColor, board.calcIndex(row, column), index);
 				players.add(loadingPlayer);
+				index++;
 			}
 			s.close();
 		} catch (FileNotFoundException e) {
@@ -126,6 +133,7 @@ public class ClueGame {
 		}
 	}
 
+	// Loads the Weapon File and adds the Weapon Files
 	public void loadWeaponConfig() throws BadConfigFormatException {
 		Card loadingCard; 
 		try {
@@ -141,7 +149,7 @@ public class ClueGame {
 		}
 	}
 
-	// Be sure to trim the color, we don't want spaces around the name
+	// Convert a String to a Java Color Object
 	public Color convertColor(String strColor) {
 		Color color; 
 		try {     
@@ -155,20 +163,60 @@ public class ClueGame {
 		return color;
 	}
 
-	public void selectAnswer(){
-		//implementation
-	}
-
+	// Determines whether a suggestion is plausible or not
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson){
-		return null;
+		int start = rand.nextInt(5);
+		ArrayList<Card> temp = new ArrayList<Card>();
+		boolean cardFound = false;
+		
+		for(int i = 0; i < 6; i++){	
+			int queriedPerson = start%6; 
+			
+			if(accusingPerson.getIndex() != queriedPerson){
+				for(int cardIndex = 0; cardIndex < players.get(queriedPerson).getMyCards().size(); cardIndex++){
+					
+					if(players.get(queriedPerson).getMyCards().get(cardIndex).getName().equalsIgnoreCase(person) || players.get(queriedPerson).getMyCards().get(cardIndex).getName().equalsIgnoreCase(room) || players.get(queriedPerson).getMyCards().get(cardIndex).getName().equalsIgnoreCase(weapon)){
+						
+						if(!revealed.contains(players.get(queriedPerson).getMyCards().get(cardIndex))){
+							temp.add(players.get(queriedPerson).getMyCards().get(cardIndex));
+							cardFound = true;
+						}
+					
+					}
+				
+				}
+			}
+			
+			if(cardFound)
+				break;
+			start++;
+		}
+		
+		if (temp.size() != 0) {
+			Card reveal = temp.get(rand.nextInt(temp.size()));
+			revealed.add(reveal);
+			return reveal;
+		} else 
+			return null; 
 	}
 
 	public boolean checkAccusation(Solution solution){
-		return false;
+		if(answer.equals(solution))
+			return true;
+		else
+			return false;
 	}
 
 
 	// Getters and Setters are added here to be used with test cases
+	public void setRevealed(ArrayList<Card> revealed) {
+		this.revealed = revealed;
+	}
+		
+	public ArrayList<Card> getRevealed() {
+		return revealed;
+	}
+
 	public void setCards(ArrayList<Card> cards) {
 		this.cards = cards;
 	}

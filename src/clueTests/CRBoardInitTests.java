@@ -5,6 +5,7 @@ package clueTests;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 
+
 import java.io.FileNotFoundException;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import clueGame.BadConfigFormatException;
 import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.RoomCell;
+
 
 public class CRBoardInitTests {
 	// I made this static because I only want to set it up one 

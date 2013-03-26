@@ -6,8 +6,9 @@ import java.util.ArrayList;
 public class Player {
 
 	private String name;
+	private int index;
 	private Color color;
-	private ArrayList<Card> myCards;
+	protected ArrayList<Card> myCards;
 	private int startLocation;
 
 	public Player() {
@@ -15,10 +16,11 @@ public class Player {
 	}
 	
 	//Constructor
-	public Player(String name, Color color, int startLoc){
+	public Player(String name, Color color, int startLoc, int index){
 		this.name = name; 
 		this.color = color; 
 		this.startLocation = startLoc; 
+		this.index = index;
 		myCards = new ArrayList<Card>();
 	}
 
@@ -56,12 +58,18 @@ public class Player {
 	}
 
 	public void setMyCards(ArrayList<Card> myCards) {
-		this.myCards = myCards;
+		this.myCards.clear(); 
+		
+		for(int i = 0; i < myCards.size(); i++)
+			this.myCards.add(myCards.get(i));
 	}
 	
 	public void addCard(Card card){
 		myCards.add(card);
-		System.out.println(card.getName());
+	}
+	
+	public int getIndex(){
+		return index;
 	}
 }
 

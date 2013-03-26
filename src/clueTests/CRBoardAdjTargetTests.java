@@ -1,5 +1,6 @@
 package clueTests;
 
+
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import org.junit.Test;
 
 import clueGame.Board;
 import clueGame.BoardCell;
+
 
 public class CRBoardAdjTargetTests {
 	private static Board board;

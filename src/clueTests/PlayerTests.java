@@ -2,6 +2,7 @@ package clueTests;
 
 import static org.junit.Assert.*;
 
+
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -10,11 +11,12 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import clueGame.Card;
-import clueGame.Card.CardType;
 import clueGame.Board;
+import clueGame.Card;
 import clueGame.ClueGame;
 import clueGame.Player;
+import clueGame.Card.CardType;
+
 
 public class PlayerTests {
 

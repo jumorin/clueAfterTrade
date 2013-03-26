@@ -2,6 +2,8 @@ package clueTests;
 
 import static org.junit.Assert.*;
 
+
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -21,9 +23,10 @@ import clueGame.Player;
 import clueGame.Solution;
 import clueGame.Card.CardType;
 
+
 public class GameActionTests {
 
-	Board board;
+	//Board board;
 	ClueGame game; 
 	
 	// Card Variables 
@@ -36,13 +39,12 @@ public class GameActionTests {
 	Card whiteCard; 
 	Card wrenchCard; 
 	Card ballroomCard; 
+	Card dummyCard; 
 	
 	// Set up the Board and the Game
 	@Before
 	public void setUp() throws FileNotFoundException {
-		board = new Board("ClueMap.csv","legend.txt");
-		board.loadConfigFiles();
-		game = new ClueGame("ClueRooms.txt", "CluePeople.txt", "ClueWeapons.txt"); 
+		game = new ClueGame("ClueRooms.txt", "CluePlayers.txt", "ClueWeapons.txt"); 
 	}
 	
 	@Test
@@ -70,13 +72,13 @@ public class GameActionTests {
 		ComputerPlayer player = new ComputerPlayer();
 		
 		// Pick a location that has a room its target list and ensure that the room location is always selected 
-		board.calcTargets(board.calcIndex(1, 1), 3);
+		game.getBoard().startTargets(game.getBoard().calcIndex(1, 1), 3);
 		int loc_1_1Tot = 0; 
 		
 		// Run the test 20 times
 		for (int i=0; i<20; i++) {
-			BoardCell selected = player.pickLocation(board.getTargets());
-			if (selected == board.getCellAt(board.calcIndex(3, 1)))
+			BoardCell selected = player.pickLocation(game.getBoard(), game.getBoard().getTargets());
+			if (selected == game.getBoard().getCellAt(game.getBoard().calcIndex(3, 1)))
 				loc_1_1Tot++;
 			else
 				fail("Invalid target selected");
@@ -91,16 +93,16 @@ public class GameActionTests {
 		ComputerPlayer player = new ComputerPlayer();
 		
 		// Pick a location with no rooms in target, just two targets
-		board.calcTargets(board.calcIndex(2, 24), 2);
+		game.getBoard().startTargets(game.getBoard().calcIndex(2, 24), 2);
 		int loc_2_22Tot = 0;
 		int loc_3_23Tot = 0;
 		
 		// Run the test 100 times
 		for (int i=0; i<100; i++) {
-			BoardCell selected = player.pickLocation(board.getTargets());
-			if (selected == board.getCellAt(board.calcIndex(12, 0)))
+			BoardCell selected = player.pickLocation(game.getBoard(), game.getBoard().getTargets());
+			if (selected == game.getBoard().getCellAt(game.getBoard().calcIndex(2, 22)))
 				loc_2_22Tot++;
-			else if (selected == board.getCellAt(board.calcIndex(14, 2)))
+			else if (selected == game.getBoard().getCellAt(game.getBoard().calcIndex(3, 23)))
 				loc_3_23Tot++;
 			else
 				fail("Invalid target selected");
@@ -119,19 +121,19 @@ public class GameActionTests {
 		ComputerPlayer player = new ComputerPlayer();
 		
 		// Pick a location that is a room and test whether the selection chooses a random location
-		board.calcTargets(board.calcIndex(21, 18), 2);
+		game.getBoard().startTargets(game.getBoard().calcIndex(21, 18), 2);
 		int loc_20_17Tot = 0;
 		int loc_20_19Tot = 0;
 		int loc_19_18Tot = 0; 
 		
 		// Run the test 100 times
 		for (int i=0; i<100; i++) {
-			BoardCell selected = player.pickLocation(board.getTargets());
-			if (selected == board.getCellAt(board.calcIndex(20, 17)))
+			BoardCell selected = player.pickLocation(game.getBoard(), game.getBoard().getTargets());
+			if (selected == game.getBoard().getCellAt(game.getBoard().calcIndex(20, 17)))
 				loc_20_17Tot++;
-			else if (selected == board.getCellAt(board.calcIndex(20, 19)))
+			else if (selected == game.getBoard().getCellAt(game.getBoard().calcIndex(20, 19)))
 				loc_20_19Tot++;
-			else if (selected == board.getCellAt(board.calcIndex(19, 18)))
+			else if (selected == game.getBoard().getCellAt(game.getBoard().calcIndex(19, 18)))
 				loc_19_18Tot++;			
 			else
 				fail("Invalid target selected");
@@ -160,6 +162,8 @@ public class GameActionTests {
 		whiteCard = new Card("Mrs. White", Card.CardType.PERSON); 
 		wrenchCard = new Card("Wrench", Card.CardType.WEAPON); 
 		ballroomCard = new Card ("Ballroom", Card.CardType.ROOM);
+		
+		dummyCard = new Card("Dummy", Card.CardType.PERSON); 
 	}
 	
 	@Test
@@ -173,12 +177,19 @@ public class GameActionTests {
 		someCards.add(libraryCard);
 		someCards.add(kitchenCard); 
 		game.getPlayers().get(0).setMyCards(someCards);
-				
+		someCards.clear();
+		someCards.add(dummyCard);
+		game.getPlayers().get(1).setMyCards(someCards);
+		game.getPlayers().get(2).setMyCards(someCards);
+		game.getPlayers().get(3).setMyCards(someCards);
+		game.getPlayers().get(4).setMyCards(someCards);
+		game.getPlayers().get(5).setMyCards(someCards);
+		
 		// If one of the players has a card, then the card should be returned by the handleSuggestion method. If not, the method returns null.
-		Assert.assertEquals(greenCard, game.handleSuggestion("Mr. Green", "Conservatory", "Candle Stick", game.getPlayers().get(1)));
-		Assert.assertEquals(kitchenCard, game.handleSuggestion("Miss Scarlet", "Kitchen", "Candle Stick", game.getPlayers().get(1)));
-		Assert.assertEquals(pipeCard, game.handleSuggestion("Colonel Mustard", "Dining Room", "Lead Pipe", game.getPlayers().get(1)));
-		Assert.assertEquals(null, game.handleSuggestion("Miss Scarlet", "Conservatory", "Candle Stick", game.getPlayers().get(1)));
+		Assert.assertEquals(greenCard.getName(), game.handleSuggestion("Mr. Green", "Conservatory", "Candlestick", game.getPlayers().get(1)).getName());
+		Assert.assertEquals(kitchenCard.getName(), game.handleSuggestion("Miss Scarlet", "Kitchen", "Candlestick", game.getPlayers().get(1)).getName());
+		Assert.assertEquals(pipeCard.getName(), game.handleSuggestion("Colonel Mustard", "Dining Room", "Lead Pipe", game.getPlayers().get(1)).getName());
+		Assert.assertEquals(null, game.handleSuggestion("Miss Scarlet", "Conservatory", "Candlestick", game.getPlayers().get(1)));
 	}
 	
 	@Test
@@ -193,6 +204,13 @@ public class GameActionTests {
 		someCards.add(libraryCard);
 		someCards.add(kitchenCard); 
 		game.getPlayers().get(0).setMyCards(someCards);
+		someCards.clear();
+		someCards.add(dummyCard);
+		game.getPlayers().get(1).setMyCards(someCards);
+		game.getPlayers().get(2).setMyCards(someCards);
+		game.getPlayers().get(3).setMyCards(someCards);
+		game.getPlayers().get(4).setMyCards(someCards);
+		game.getPlayers().get(5).setMyCards(someCards);
 		
 		int greenCount = 0; 
 		int kitchenCount = 0; 
@@ -200,13 +218,15 @@ public class GameActionTests {
 		
 		// Using a loop checks that the cards matching the accusation are revealed randomly
 		for (int i = 0; i < 100; i++) {
-			Card returned = game.handleSuggestion("Mr. Green", "Library", "Lead Pipe", game.getPlayers().get(1));
+			// The setRevealed method resets the revealed array list of the game, so that handle suggestion can work correctly.
+			game.setRevealed(new ArrayList<Card>()); 
+			Card returned = game.handleSuggestion("Mr. Green", "Kitchen", "Lead Pipe", game.getPlayers().get(1));
 			
-			if (returned.equals(greenCard))
+			if (returned.getName().equals(greenCard.getName()))
 				greenCount++; 
-			else if (returned.equals(kitchenCard))
+			else if (returned.getName().equals(kitchenCard.getName()))
 				kitchenCount++; 
-			else if (returned.equals(pipeCard))
+			else if (returned.getName().equals(pipeCard.getName()))
 				pipeCount++; 
 			else
 				fail("Incorrect Card Returned"); 
@@ -253,13 +273,14 @@ public class GameActionTests {
 		
 		someCards.clear(); 
 		someCards.add(ballroomCard);
-		game.getHuman().setMyCards(someCards); 
-		ourPlayers.add(game.getHuman()); 
+		game.getPlayers().get(5).setMyCards(someCards);
+		ourPlayers.add(game.getPlayers().get(5));
+
 		
 		// Made a suggestion no players could disprove
 		Assert.assertEquals(null, game.handleSuggestion("Colonel Mustard", "Study", "Rope", ourPlayers.get(0)));
-		// Made a suggestion that only the human player could disprove
-		Assert.assertEquals(ballroomCard, game.handleSuggestion("Colonel Mustard", "Ballroom", "Rope", ourPlayers.get(0)));
+		// Made a suggestion that only one player could disprove
+		Assert.assertEquals(ballroomCard.getName(), game.handleSuggestion("Colonel Mustard", "Ballroom", "Rope", ourPlayers.get(0)).getName());
 		// Made a suggestion that only the person making the suggestion could disprove
 		Assert.assertEquals(null, game.handleSuggestion("Colonel Mustard", "Ballroom", "Rope", ourPlayers.get(5)));
 				
@@ -270,9 +291,9 @@ public class GameActionTests {
 		for (int i = 0; i < 100; i++) {
 			Card returned = game.handleSuggestion("Colonel Mustard", "Kitchen", "Lead Pipe", ourPlayers.get(2));
 			
-			if (returned.equals(kitchenCard)) 
+			if (returned.getName().equals(kitchenCard.getName())) 
 				player_1_count++; 
-			else if (returned.equals(pipeCard)) 
+			else if (returned.getName().equals(pipeCard.getName())) 
 				player_0_count++; 
 			else
 				fail("No Correct Cards Returned"); 
@@ -284,17 +305,18 @@ public class GameActionTests {
 	@Test
 	public void computerPlayerSuggestionTest() {
 		// Ensure that the computer player makes a suggestion in order to learn more information (not a card that has been seen)
-		ComputerPlayer computer = new ComputerPlayer(); 
-		
-		// Set the computer players location to a room
-		computer.setLocation(board.calcIndex(3,1)); 
-		computer.createSuggestion(board.calcIndex(3, 1));
+		ComputerPlayer computer = new ComputerPlayer("John", Color.BLACK, 10,10); 
 		
 		// Create a list of cards that have been seen (these cards should not show up in the suggestion)
 		computer.updateSeen(plumCard); 
 		computer.updateSeen(ballroomCard); 
 		computer.updateSeen(pipeCard);
 		computer.updateSeen(revolverCard); 
+		// Set the computer players location to a room	
+		computer.setLocation(game.getBoard().calcIndex(3,1)); 
+		computer.createSuggestion(game, game.getBoard().calcIndex(3, 1));
+		
+		
 		
 		// Assert that the current location (even though its card has been seen) is the room that is suggested
 		Assert.assertEquals("Ballroom", computer.getRoomSuggestion()); 

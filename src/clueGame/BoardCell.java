@@ -1,6 +1,6 @@
 package clueGame;
 
-public abstract class BoardCell {
+public abstract class BoardCell{
 	protected String initial;
 	public boolean isWalkway() {
 		return false;

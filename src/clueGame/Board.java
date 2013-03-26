@@ -2,6 +2,7 @@ package clueGame;
 //John Aspinwall
 //Zachary Zembower
 
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.util.Scanner;
 
 import clueGame.RoomCell.DoorDirection;
+
 
 public class Board {
 	private ArrayList<BoardCell> cells;
@@ -34,6 +36,11 @@ public class Board {
 		rooms = new HashMap<Character,String>();
 		adjList = new ArrayList<LinkedList<Integer>>();
 		numCols = new ArrayList<Integer>();
+		visited = new ArrayList<Boolean>();
+		
+		loadConfigFiles();
+		calcAdjacencies();
+		
 	}
 	
 	//file loading helper function
@@ -116,6 +123,7 @@ public class Board {
 			e.printStackTrace();
 		}
 	}
+	
 	public int calcIndex(int row, int col) {
 		int location;
 		location = row * numColumns + col;
@@ -129,30 +137,33 @@ public class Board {
 			return null;
 	}
 
-	/*
 	public RoomCell getRoomCellAt(int location) {
 		if(cells.get(location).isRoom())
 			return new RoomCell(cells.get(location).initial);
 		else
 			return null;
 	}
-	*/
 	
 	public BoardCell getCellAt(int location) {
 		return cells.get(location);
 	}
+	
 	public ArrayList<BoardCell> getBoardCells() {
 		return cells;
 	}
+	
 	public Map<Character,String> getRooms() {
 		return rooms;
 	}
+	
 	public int getNumRows() {
 		return numRows;
 	}
+	
 	public int getNumColumns() {
 		return numColumns;
 	}
+	
 	public void startTargets(int location, int roll) {
 		LinkedList<Integer> adjList = getAdjList(location);
 		targets = new HashSet<Integer>();
@@ -162,18 +173,21 @@ public class Board {
 		visited.set(location, true);
 		if(roll == 1) {
 			for(Integer i: adjList)
-				targets.add(i/*this.getAdjList(location)*/);
+				targets.add(i);
 		} else {
 			for(Integer i: adjList) {
 				calcTargets(i,roll-1);
 			}
 		}
 	}
+	
 	public void calcTargets(int location, int roll) {
 		LinkedList<Integer> adjList = getAdjList(location);
 		visited.set(location, true);
+		
 		if(cells.get(location).isDoorway())
 			targets.add(location);
+		
 		for(Integer i: adjList) {
 			if(visited.get(i) == false)
 				if(roll == 1)
@@ -181,12 +195,13 @@ public class Board {
 				else 
 					calcTargets(i,roll-1);
 		}
-
 		visited.set(location, false);
 	}
+	
 	public Set getTargets() {
 		return targets;
 	}
+	
 	public void calcAdjacencies() {
 		for(int i = 0; i < cells.size(); i++) {
 			//RoomCell cell = new RoomCell(cells.get(i).initial);
@@ -208,6 +223,7 @@ public class Board {
 		}
 	}
 	public LinkedList<Integer> getAdjList(int i) {
+		
 		return adjList.get(i);
 	}
 	
