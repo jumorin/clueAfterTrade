@@ -3,6 +3,9 @@ package clueGame;
 //Zachary Zembower
 
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +17,13 @@ import java.util.Set;
 import java.io.File;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import clueGame.RoomCell.DoorDirection;
 
 
-public class Board {
+public class Board extends JPanel {
 	private ArrayList<BoardCell> cells;
 	private Map<Character,String> rooms;
 	private int numRows, numColumns;
@@ -26,6 +32,8 @@ public class Board {
 	private ArrayList<LinkedList<Integer>> adjList;
 	private ArrayList<Boolean> visited;
 	private Set targets;
+	private ArrayList<Player> players;
+	private static final int BOARDCELL_SIZE = 20;
 	
 	//Constructor which accepts the file names
 	//initializes ArrayLists and HashMaps
@@ -37,7 +45,7 @@ public class Board {
 		adjList = new ArrayList<LinkedList<Integer>>();
 		numCols = new ArrayList<Integer>();
 		visited = new ArrayList<Boolean>();
-		
+		players = new ArrayList<Player>();
 		loadConfigFiles();
 		calcAdjacencies();
 		
@@ -129,6 +137,15 @@ public class Board {
 		location = row * numColumns + col;
 		return location;
 	}
+	
+	public Point calPosition(int index)
+	{
+		Point p = new Point();
+		p.x = index % numRows;
+		p.y = index / numRows;
+		return p;
+	}
+	
 
 	public RoomCell getRoomCellAt(int row, int col) {
 		if(cells.get(calcIndex(row, col)).isRoom())
@@ -225,6 +242,30 @@ public class Board {
 	public LinkedList<Integer> getAdjList(int i) {
 		
 		return adjList.get(i);
+	}
+	
+	// Draw Method
+	public void paintComponent(Graphics g) {
+		super.paintComponents(g);
+		// TODO Revamp cells
+		for (int i = 0; i < numColumns; i++)
+			for (int j = 0; j < numRows; j++) 
+				cells.get(calcIndex(j,i)).draw(g,BOARDCELL_SIZE, i*BOARDCELL_SIZE,j*BOARDCELL_SIZE);
+		
+		for (int i = 0; i < numColumns; i++)
+			for (int j = 0; j < numRows; j++) 
+				if(cells.get(calcIndex(j,i)).isRoom())
+					cells.get(calcIndex(j,i)).drawString(g,i*BOARDCELL_SIZE,j*BOARDCELL_SIZE, rooms);
+		for(Player p : players)
+		{
+			// TODO revamp p.drawMethod
+			p.draw(g, calPosition(p.getCurrentLocation()).x *BOARDCELL_SIZE,calPosition(p.getCurrentLocation()).y * BOARDCELL_SIZE, BOARDCELL_SIZE);
+		}
+	}
+
+	public void addPlayers(ArrayList<Player> players) {
+		this.players = players;
+		
 	}
 	
 }

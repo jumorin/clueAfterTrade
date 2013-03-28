@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class Player {
@@ -9,7 +10,7 @@ public class Player {
 	private int index;
 	private Color color;
 	protected ArrayList<Card> myCards;
-	private int startLocation;
+	private int currentLocation;
 
 	public Player() {
 		
@@ -19,7 +20,7 @@ public class Player {
 	public Player(String name, Color color, int startLoc, int index){
 		this.name = name; 
 		this.color = color; 
-		this.startLocation = startLoc; 
+		this.currentLocation = startLoc; 
 		this.index = index;
 		myCards = new ArrayList<Card>();
 	}
@@ -45,12 +46,17 @@ public class Player {
 		this.color = color;
 	}
 	
+	//TODO remvoe getStartLocation
 	public int getStartLocation(){
-		return startLocation;
+		return currentLocation;
+	}
+	
+	public int getCurrentLocation(){
+		return currentLocation;
 	}
 	
 	public void setStartLocation(int startLocation) {
-		this.startLocation = startLocation;
+		this.currentLocation = startLocation;
 	}
 
 	public ArrayList<Card> getMyCards() {
@@ -71,6 +77,14 @@ public class Player {
 	public int getIndex(){
 		return index;
 	}
+
+	public void draw(Graphics g, int locX, int locY, int width) {
+		g.setColor(color);
+		
+		g.fillOval(locX, locY, width, width);
+		
+	}
+
 }
 
 

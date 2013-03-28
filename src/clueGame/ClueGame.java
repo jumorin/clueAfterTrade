@@ -1,7 +1,12 @@
 package clueGame;
 
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,12 +14,15 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+
 import clueGame.Card.CardType;
 
 import sun.reflect.misc.FieldUtil;
 
 
-public class ClueGame {
+public class ClueGame extends JFrame {
+	
 	// Variables for the Class:
 	Random rand = new Random();
 	ArrayList<Card> cards;
@@ -26,12 +34,14 @@ public class ClueGame {
 	private String peopleFile, weaponFile, roomFile; 
 	Board board; 
 
-	//turn is index from 0-5
+	//Turn is index from 0-5
 	private int turn;
 
 	//ClueGame Constructor
 	public ClueGame(String rooms, String people, String weapons){
+		// Initialize the board with the configuration files
 		board = new Board("ClueMap.csv","legend.txt");
+		this.add(board, BorderLayout.CENTER);
 
 		ArrayList<String> answer = new ArrayList<String>();
 
@@ -39,13 +49,24 @@ public class ClueGame {
 		players = new ArrayList<Player>(); 
 		revealed = new ArrayList<Card>();
 
+		// Set the configuration files
 		this.roomFile = rooms; 
 		this.peopleFile = people; 
 		this.weaponFile = weapons; 
 		loadConfigFiles(); 
-
+		board.addPlayers(players);
+		// Create the human player
 		human = new HumanPlayer(players.get(0).getName(), players.get(0).getColor(), players.get(0).getStartLocation(), 0);
 		deal();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("Clue Game");
+		this.setVisible(true);
+		this.setSize(new Dimension(600,700));
+	}
+	
+	public void run()
+	{
+		this.drawBoard();
 	}
 
 	// Deal the cards "randomly"
@@ -206,7 +227,11 @@ public class ClueGame {
 		else
 			return false;
 	}
-
+	
+	public void drawBoard()
+	{
+		board.repaint();
+	}
 
 	// Getters and Setters are added here to be used with test cases
 	public void setRevealed(ArrayList<Card> revealed) {
@@ -249,7 +274,6 @@ public class ClueGame {
 		return players.get(i);
 	}
 
-
 	public ArrayList<Card> getDeck(){
 		return cards;
 	}
@@ -260,10 +284,8 @@ public class ClueGame {
 			if(c.getType() == CardType.ROOM)
 				count++;
 		}
-
 		return count;
 	}
-
 
 	public int getNumPersons(){
 		int count = 0;
@@ -271,7 +293,6 @@ public class ClueGame {
 			if(c.getType() == CardType.PERSON)
 				count++;
 		}
-
 		return count;
 	}
 
@@ -281,9 +302,6 @@ public class ClueGame {
 			if(c.getType() == CardType.WEAPON)
 				count++;
 		}
-
 		return count;
 	}
-
-
 }
