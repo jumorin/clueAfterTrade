@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +17,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import clueGame.Card.CardType;
 
@@ -33,6 +38,10 @@ public class ClueGame extends JFrame {
 	private Solution answer;
 	private String peopleFile, weaponFile, roomFile; 
 	Board board; 
+	private DetectiveNote detecitveNote;
+	JMenuBar menuBar;
+	JMenu menu;
+	JMenuItem displayDetectiveNote;
 
 	//Turn is index from 0-5
 	private int turn;
@@ -60,8 +69,26 @@ public class ClueGame extends JFrame {
 		deal();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Clue Game");
+		menuBar = new JMenuBar();
+		menu = new JMenu("File");
+		displayDetectiveNote = new JMenuItem("Display Detective Notes");
+		
+		displayDetectiveNote.addActionListener(
+			new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					detecitveNote.setVisible(true);
+	            }
+	        }
+		);
+		
+		menu.add(displayDetectiveNote);
+		menuBar.add(menu);
+		this.setJMenuBar(menuBar);
 		this.setVisible(true);
-		this.setSize(new Dimension(600,700));
+		this.setSize(new Dimension(515,560));
+		detecitveNote = new DetectiveNote("CluePlayers.txt", "ClueRooms.txt", "ClueWeapons.txt");
+		detecitveNote.initialize();
+
 	}
 	
 	public void run()
@@ -102,7 +129,7 @@ public class ClueGame extends JFrame {
 			this.loadWeaponConfig(); 
 		} catch (BadConfigFormatException e) {
 			System.out.println("Bad config file");
-		}	
+		}
 	}
 
 	// Loads the Room File and adds Room Cards

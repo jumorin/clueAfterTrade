@@ -60,7 +60,7 @@ public class RoomCell extends BoardCell {
 	public void draw(Graphics g, int width, int locX, int locY)
 	{
 		int factor = 4;
-		g.setColor(Color.WHITE);
+		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(locX, locY, width, width);
 		
 		g.setColor(Color.ORANGE);
