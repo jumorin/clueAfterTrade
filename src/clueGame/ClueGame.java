@@ -39,9 +39,11 @@ public class ClueGame extends JFrame {
 	private String peopleFile, weaponFile, roomFile; 
 	Board board; 
 	private DetectiveNote detecitveNote;
-	JMenuBar menuBar;
-	JMenu menu;
-	JMenuItem displayDetectiveNote;
+	private JMenuBar menuBar;
+	private JMenu menu;
+	private JMenuItem displayDetectiveNote;
+	private PlayerCardDisplay cardDisplay;
+	private ControlGUI controlGUI;
 
 	//Turn is index from 0-5
 	private int turn;
@@ -85,10 +87,15 @@ public class ClueGame extends JFrame {
 		menuBar.add(menu);
 		this.setJMenuBar(menuBar);
 		this.setVisible(true);
-		this.setSize(new Dimension(515,560));
+		this.setSize(new Dimension(625, 660));
 		detecitveNote = new DetectiveNote("CluePlayers.txt", "ClueRooms.txt", "ClueWeapons.txt");
 		detecitveNote.initialize();
-
+		this.setLayout(new BorderLayout());
+		cardDisplay = new PlayerCardDisplay();
+		this.add(cardDisplay, BorderLayout.EAST);
+		controlGUI = new ControlGUI();
+		this.add(controlGUI, BorderLayout.SOUTH);
+		this.setVisible(true);
 	}
 	
 	public void run()

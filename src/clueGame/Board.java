@@ -3,6 +3,7 @@ package clueGame;
 //Zachary Zembower
 
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -17,6 +18,7 @@ import java.util.Set;
 import java.io.File;
 import java.util.Scanner;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -34,6 +36,7 @@ public class Board extends JPanel {
 	private Set targets;
 	private ArrayList<Player> players;
 	private static final int BOARDCELL_SIZE = 20;
+
 	
 	//Constructor which accepts the file names
 	//initializes ArrayLists and HashMaps
@@ -48,7 +51,6 @@ public class Board extends JPanel {
 		players = new ArrayList<Player>();
 		loadConfigFiles();
 		calcAdjacencies();
-		
 	}
 	
 	//file loading helper function

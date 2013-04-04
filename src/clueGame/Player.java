@@ -46,7 +46,6 @@ public class Player {
 		this.color = color;
 	}
 	
-	//TODO remvoe getStartLocation
 	public int getStartLocation(){
 		return currentLocation;
 	}
