@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import clueGame.Card.CardType;
 
@@ -83,24 +84,53 @@ public class ClueGame extends JFrame {
 	        }
 		);
 		
+		splashScreen(players.get(0).getName());
+		
 		menu.add(displayDetectiveNote);
 		menuBar.add(menu);
 		this.setJMenuBar(menuBar);
 		this.setVisible(true);
-		this.setSize(new Dimension(625, 660));
+		this.setSize(new Dimension(720, 690));
 		detecitveNote = new DetectiveNote("CluePlayers.txt", "ClueRooms.txt", "ClueWeapons.txt");
 		detecitveNote.initialize();
 		this.setLayout(new BorderLayout());
-		cardDisplay = new PlayerCardDisplay();
+		
+		cardDisplay = new PlayerCardDisplay(players.get(0).getMyCards());
 		this.add(cardDisplay, BorderLayout.EAST);
 		controlGUI = new ControlGUI();
+		controlGUI.addGame(this);
 		this.add(controlGUI, BorderLayout.SOUTH);
 		this.setVisible(true);
+		
+		turn = players.size() -1;
+	}
+	
+	public void splashScreen(String humanName)
+	{
+		JOptionPane.showMessageDialog(this, "Welcome to Clue you are "+humanName+ ". Press Next Player to begin play.");
 	}
 	
 	public void run()
 	{
 		this.drawBoard();
+	}
+	
+	public void performNextTurn()
+	{
+		if(!players.get(turn).canProceed())
+		{
+			JOptionPane.showMessageDialog(this, "Please Select a Target Location");
+			return;
+		}
+
+		turn = (turn + 1) % players.size();
+		controlGUI.setWhoseTurn(players.get(turn).getName());
+		Random rand = new Random();
+		int rollValue = rand.nextInt(6) + 1;
+		controlGUI.setDice(rollValue);
+		int currentLocation = players.get(turn).getCurrentLocation();
+		board.startTargets(currentLocation, rollValue);
+		players.get(turn).performTurn(rollValue, board, board.getTargets() );
 	}
 
 	// Deal the cards "randomly"
@@ -165,6 +195,7 @@ public class ClueGame extends JFrame {
 
 			java.util.Scanner s = new Scanner(new File(peopleFile));
 			int index = 0;
+			boolean first = true;
 			while (s.hasNext()){
 				// Load the Name and Type of Player:
 				String line = s.nextLine();
@@ -177,8 +208,18 @@ public class ClueGame extends JFrame {
 
 				// Create the new player:
 				Color playerColor = convertColor(personArray[1]);
-				loadingPlayer = new Player(personArray[0], playerColor, board.calcIndex(row, column), index);
-				players.add(loadingPlayer);
+				if (first)
+				{
+					loadingPlayer = new HumanPlayer(personArray[0], playerColor, board.calcIndex(row, column), index);
+					players.add(loadingPlayer);
+					first = false;
+				}
+				else
+				{
+					loadingPlayer = new ComputerPlayer(personArray[0], playerColor, board.calcIndex(row, column), index);
+					players.add(loadingPlayer);
+				}
+				
 				index++;
 			}
 			s.close();

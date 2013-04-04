@@ -3,19 +3,27 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Set;
 
-public class Player {
+public abstract class Player {
 
 	private String name;
 	private int index;
 	private Color color;
 	protected ArrayList<Card> myCards;
-	private int currentLocation;
+	protected int currentLocation;
 
 	public Player() {
 		
 	}
 	
+	
+	public abstract void performTurn(int diceValue, Board board, Set<Integer> targets);
+	
+	public boolean canProceed()
+	{
+		return true;
+	}
 	//Constructor
 	public Player(String name, Color color, int startLoc, int index){
 		this.name = name; 

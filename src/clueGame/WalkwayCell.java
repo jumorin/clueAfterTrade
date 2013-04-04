@@ -21,7 +21,14 @@ public class WalkwayCell extends BoardCell {
 	{
 		int offsetX = locX * cellSize;
 		int offsetY = locY * cellSize;
-		g.setColor(Color.BLUE);
+		if (highlight)
+		{
+			g.setColor(Color.PINK);
+		}
+		else
+		{
+			g.setColor(Color.BLUE);
+		}
 		g.fillRect(offsetX, offsetY, cellSize, cellSize);
 		g.setColor(Color.BLACK);
 		g.drawRect(offsetX, offsetY, cellSize, cellSize);

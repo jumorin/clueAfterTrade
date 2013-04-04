@@ -131,4 +131,14 @@ public class ComputerPlayer extends Player {
 	public String getRoomSuggestion() {
 		return roomSuggestion;
 	}
+
+	@Override
+	public void performTurn(int diceValue, Board board, Set<Integer> targets) {
+
+		BoardCell cell = pickLocation(board, targets);
+		System.out.println(location);
+		currentLocation = board.calcIndex(cell.locX, cell.locY);
+		System.out.println(location);
+		board.repaint();
+	}
 }

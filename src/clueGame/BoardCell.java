@@ -7,6 +7,7 @@ import java.util.Map;
 public abstract class BoardCell{
 	protected String initial;
 	protected int locX, locY, cellSize;
+	protected boolean highlight;
 
 	public abstract void draw(Graphics g);
 	public abstract void drawString(Graphics g, Map<Character, String> rooms);
@@ -15,6 +16,16 @@ public abstract class BoardCell{
 		locX = posX;
 		locY = posY;
 		cellSize = size;
+		highlight = false;
+	}
+	public void noHighlight() 
+	{
+		highlight = false;
+	}
+	
+	public void setHighlight(boolean arg)
+	{
+		highlight = arg;
 	}
 	public boolean isWalkway() {
 		return false;
