@@ -6,9 +6,16 @@ import java.util.Map;
 
 public abstract class BoardCell{
 	protected String initial;
+	protected int locX, locY, cellSize;
 
-	public abstract void draw(Graphics g, int width, int locX, int locY);
-	public abstract void drawString(Graphics g, int i, int j, Map<Character, String> rooms);
+	public abstract void draw(Graphics g);
+	public abstract void drawString(Graphics g, Map<Character, String> rooms);
+	public void setLocation(int posX, int posY, int size)
+	{
+		locX = posX;
+		locY = posY;
+		cellSize = size;
+	}
 	public boolean isWalkway() {
 		return false;
 	}
@@ -22,5 +29,4 @@ public abstract class BoardCell{
 	public char getInitial() {
 		return initial.charAt(0);
 	}
-
 } 

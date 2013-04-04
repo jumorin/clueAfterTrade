@@ -59,6 +59,10 @@ public class Board extends JPanel {
 		} catch (BadConfigFormatException e) {
 			System.out.println("Bad config file");
 		}
+		
+		for (int i = 0; i < numColumns; i++)
+			for (int j = 0; j < numRows; j++) 
+				cells.get(calcIndex(j,i)).setLocation(i,j,BOARDCELL_SIZE);
 	}
 	
 	//loads the room .txt file
@@ -250,12 +254,12 @@ public class Board extends JPanel {
 		// TODO Revamp cells
 		for (int i = 0; i < numColumns; i++)
 			for (int j = 0; j < numRows; j++) 
-				cells.get(calcIndex(j,i)).draw(g,BOARDCELL_SIZE, i*BOARDCELL_SIZE,j*BOARDCELL_SIZE);
+				cells.get(calcIndex(j,i)).draw(g);
 		
 		for (int i = 0; i < numColumns; i++)
 			for (int j = 0; j < numRows; j++) 
 				if(cells.get(calcIndex(j,i)).isRoom())
-					cells.get(calcIndex(j,i)).drawString(g,i*BOARDCELL_SIZE,j*BOARDCELL_SIZE, rooms);
+					cells.get(calcIndex(j,i)).drawString(g, rooms);
 		for(Player p : players)
 		{
 			// TODO revamp p.drawMethod

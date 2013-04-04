@@ -17,16 +17,17 @@ public class WalkwayCell extends BoardCell {
 	}
 	
 	@Override
-	public void draw(Graphics g, int width, int locX, int locY)
+	public void draw(Graphics g)
 	{
+		int offsetX = locX * cellSize;
+		int offsetY = locY * cellSize;
 		g.setColor(Color.BLUE);
-		g.fillRect(locX, locY, width, width);
+		g.fillRect(offsetX, offsetY, cellSize, cellSize);
 		g.setColor(Color.BLACK);
-		g.drawRect(locX, locY, width, width);
+		g.drawRect(offsetX, offsetY, cellSize, cellSize);
 	}
 	@Override
-	public void drawString(Graphics g, int i, int j,
-			Map<Character, String> rooms) {
+	public void drawString(Graphics g,	Map<Character, String> rooms) {
 		
 	}
 }

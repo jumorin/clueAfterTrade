@@ -47,32 +47,37 @@ public class RoomCell extends BoardCell {
 		return doorDirection;
 	}
 	
-	public void drawString(Graphics g, int i, int j, Map<Character, String> rooms) {
+	public void drawString(Graphics g, Map<Character, String> rooms) {
 		if(nameFlag)
 		{
+			int offsetX = locX * cellSize;
+			int offsetY = locY * cellSize;
 			g.setColor(Color.BLACK);
-			g.drawString(rooms.get(this.getInitial()), i,j);
+			g.drawString(rooms.get(this.getInitial()), offsetX,offsetY);
 		}
-		
 	}
 	
 	@Override
-	public void draw(Graphics g, int width, int locX, int locY)
+	public void draw(Graphics g)
 	{
 		int factor = 4;
+		
+		int offsetX = locX * cellSize;
+		int offsetY = locY * cellSize;
+		
 		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(locX, locY, width, width);
+		g.fillRect(offsetX, offsetY, cellSize, cellSize);
 		
 		g.setColor(Color.ORANGE);
 		switch(this.doorDirection)
 		{
-		case UP:  g.fillRect(locX, locY, width, width/factor);
+		case UP:  g.fillRect(offsetX, offsetY, cellSize, cellSize/factor);
 			break;
-		case DOWN: g.fillRect(locX, (locY + width) - width/factor, width, width/factor);
+		case DOWN: g.fillRect(offsetX, (offsetY + cellSize) - cellSize/factor, cellSize, cellSize/factor);
 			break;
-		case LEFT: g.fillRect(locX, locY, width/factor, width);
+		case LEFT: g.fillRect(offsetX, offsetY, cellSize/factor, cellSize);
 			break;
-		case RIGHT: g.fillRect(locX + width - width/factor, locY, width/factor, width);
+		case RIGHT: g.fillRect(offsetX + cellSize - cellSize/factor, offsetY, cellSize/factor,cellSize);
 			break;
 		default:
 			break;
