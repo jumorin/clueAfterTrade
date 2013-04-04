@@ -1,13 +1,18 @@
 package clueGame;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Label;
+import java.awt.LayoutManager;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -108,29 +113,29 @@ public class DetectiveNote extends JFrame {
 		
 		PeopleBox peopleBox = new PeopleBox(people, peopleLabel);
 		peopleBox.initialize();
-		this.add(peopleBox);
+		add(peopleBox);
 		
 		PersonGuessBox pGuess = new PersonGuessBox(personGuess);
 		pGuess.initialize();
-		this.add(pGuess);
+		add(pGuess);
 		
 		WeaponBox weaponBox = new WeaponBox(weapons, weaponLabel);
 		weaponBox.initialize();
-		this.add(weaponBox);
+		add(weaponBox);
 		
 		WeaponGuessBox wGuess = new WeaponGuessBox(weaponGuess);
 		wGuess.initialize();
-		this.add(wGuess);
+		add(wGuess);
 		
 		RoomBox roomBox = new RoomBox(rooms, roomsLabel);
 		roomBox.initialize();
-		this.add(roomBox);
+		add(roomBox);
 		
 		RoomGuessBox rGuess = new RoomGuessBox(roomGuess);
 		rGuess.initialize();
-		this.add(rGuess);
+		add(rGuess);
 				
-		this.setSize(new Dimension(500,400));
+		this.setSize(new Dimension(550,500));
 		
 		
 		
@@ -157,11 +162,14 @@ public class DetectiveNote extends JFrame {
 		
 		public void initialize()
 		{
-			this.setLayout(new GridLayout(0,4));
+			this.setLayout(new GridLayout(0,2));
 			for(int i = 0; i < people.size(); i++)
 			{
-				this.add(people.get(i));
-				this.add(peopleLabel.get(i));
+				JPanel panel= new JPanel();
+				panel.setLayout(new BorderLayout());
+				panel.add(people.get(i), BorderLayout.WEST);
+				panel.add(peopleLabel.get(i), BorderLayout.CENTER);
+				this.add(panel);
 			}
 			setBorder((Border) new TitledBorder (new EtchedBorder(), "People"));
 			this.setVisible(true);
@@ -181,11 +189,14 @@ public class DetectiveNote extends JFrame {
 		
 		public void initialize()
 		{
-			this.setLayout(new GridLayout(0,4));
+			this.setLayout(new GridLayout(0,2));
 			for(int i = 0; i < weapon.size(); i++)
 			{
-				this.add(weapon.get(i));
-				this.add(weaponLabel.get(i));
+				JPanel panel = new JPanel();
+				panel.setLayout(new BorderLayout());
+				panel.add(weapon.get(i), BorderLayout.WEST);
+				panel.add(weaponLabel.get(i), BorderLayout.CENTER);
+				this.add(panel);
 			}
 			setBorder((Border) new TitledBorder (new EtchedBorder(), "Weapons"));
 			this.setVisible(true);
@@ -205,13 +216,17 @@ public class DetectiveNote extends JFrame {
 		
 		public void initialize()
 		{
-			this.setLayout(new GridLayout(0,4));
+			this.setLayout(new GridLayout(0,2));
 			for(int i = 0; i < rooms.size(); i++)
 			{
-				this.add(rooms.get(i));
-				this.add(roomsLabel.get(i));
+				JPanel panel = new JPanel();
+				panel.setLayout(new BorderLayout());
+				panel.add(rooms.get(i), BorderLayout.WEST);
+				panel.add(roomsLabel.get(i), BorderLayout.CENTER);
+				this.add(panel);
 			}
 			setBorder((Border) new TitledBorder (new EtchedBorder(), "Rooms"));
+			this.setSize(100, 50);
 			this.setVisible(true);
 		}
 		
