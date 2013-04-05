@@ -33,9 +33,9 @@ public class Board extends JPanel {
 	private String mapFile, legendFile;
 	private ArrayList<LinkedList<Integer>> adjList;
 	private ArrayList<Boolean> visited;
-	private Set targets;
+	private Set<Integer> targets;
 	private ArrayList<Player> players;
-	private static final int BOARDCELL_SIZE = 20;
+	public static final int BOARDCELL_SIZE = 20;
 
 	
 	//Constructor which accepts the file names
@@ -221,7 +221,7 @@ public class Board extends JPanel {
 		visited.set(location, false);
 	}
 	
-	public Set getTargets() {
+	public Set<Integer> getTargets() {
 		return targets;
 	}
 	
@@ -272,6 +272,12 @@ public class Board extends JPanel {
 	public void addPlayers(ArrayList<Player> players) {
 		this.players = players;
 		
+	}
+
+	public boolean isValidLocation(int row, int column) {
+		if(targets.contains(this.calcIndex(row, column)))
+			return true;
+		return false;
 	}
 	
 }

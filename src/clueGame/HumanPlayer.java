@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.Set;
 
 public class HumanPlayer extends Player {
-	private boolean selectedLocation;
 	
 	public HumanPlayer(String name, Color color, int startLoc, int index){
 		super(name, color, startLoc, index); 
@@ -20,9 +19,12 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public void performTurn(int diceValue, Board board, Set<Integer> targets) {
+		// only part1
 		selectedLocation = false;
-		// TODO Auto-generated method stub
-		
-		selectedLocation = true;
+		for(Integer i : targets)
+		{
+			board.getCellAt(i).setHighlight(true);
+		}
+		board.repaint();
 	}
 }

@@ -133,12 +133,15 @@ public class ComputerPlayer extends Player {
 	}
 
 	@Override
-	public void performTurn(int diceValue, Board board, Set<Integer> targets) {
-
+	public void performTurn(int diceValue, Board board, Set<Integer> targets) 
+	{
 		BoardCell cell = pickLocation(board, targets);
-		System.out.println(location);
-		currentLocation = board.calcIndex(cell.locX, cell.locY);
-		System.out.println(location);
+		currentLocation = board.calcIndex(cell.locY, cell.locX);
+		if(board.getCellAt(currentLocation).isRoom())
+		{
+			this.lastRoomVisited = board.getCellAt(currentLocation).getInitial();
+		}
+		
 		board.repaint();
 	}
 }

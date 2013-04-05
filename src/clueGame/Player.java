@@ -12,9 +12,15 @@ public abstract class Player {
 	private Color color;
 	protected ArrayList<Card> myCards;
 	protected int currentLocation;
+	protected boolean selectedLocation;
 
 	public Player() {
 		
+	}
+	
+	public void setSelectedLocation(boolean arg)
+	{
+		selectedLocation = arg;
 	}
 	
 	

@@ -6,5 +6,4 @@ public class Main {
 		ClueGame game = new ClueGame("ClueRooms.txt", "CluePlayers.txt", "ClueWeapons.txt");
 		game.run();
 	}
-
 }

@@ -8,11 +8,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -30,7 +33,7 @@ import sun.reflect.misc.FieldUtil;
 public class ClueGame extends JFrame {
 	
 	// Variables for the Class:
-	Random rand = new Random();
+	Random rand = new Random(new Date().getTime());
 	ArrayList<Card> cards;
 	ArrayList<Card> revealed;
 	ArrayList<Player> players;
@@ -101,6 +104,7 @@ public class ClueGame extends JFrame {
 		controlGUI.addGame(this);
 		this.add(controlGUI, BorderLayout.SOUTH);
 		this.setVisible(true);
+		this.addMouseListener(new ClickEvent());
 		
 		turn = players.size() -1;
 	}
@@ -131,6 +135,7 @@ public class ClueGame extends JFrame {
 		int currentLocation = players.get(turn).getCurrentLocation();
 		board.startTargets(currentLocation, rollValue);
 		players.get(turn).performTurn(rollValue, board, board.getTargets() );
+		
 	}
 
 	// Deal the cards "randomly"
@@ -151,7 +156,7 @@ public class ClueGame extends JFrame {
 			int temp = rand.nextInt(21);
 
 			if(!dealt[temp]){
-				players.get(i%6).addCard(cards.get(i));
+				players.get(i%6).addCard(cards.get(temp));
 				dealt[temp] = true;
 				i++;
 			}
@@ -378,5 +383,59 @@ public class ClueGame extends JFrame {
 				count++;
 		}
 		return count;
+	}
+	
+	public int mapXLocation(int location)
+	{
+		return (location- 4)/board.BOARDCELL_SIZE;
+	}
+	
+	public int mapYLocation(int location)
+	{
+		return (location- 46)/board.BOARDCELL_SIZE;
+	}
+	
+	class ClickEvent implements MouseListener
+	{
+
+		public void mouseClicked(MouseEvent e) {
+			
+		}
+
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			if (turn == 0)
+			{
+				int column = mapXLocation(e.getX());
+				int row = mapYLocation(e.getY());
+				System.out.println(row);
+
+				if(board.isValidLocation(row, column))
+				{
+					players.get(0).setStartLocation(board.calcIndex(row, column));
+					players.get(0).setSelectedLocation(true);
+					for(Integer i : board.getTargets())
+					{
+						board.getCellAt(i).setHighlight(false);
+					}
+					board.repaint();
+				}
+			}
+			
+		}
 	}
 }
