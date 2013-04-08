@@ -43,6 +43,7 @@ public class ClueGame extends JFrame {
 	private String peopleFile, weaponFile, roomFile; 
 	Board board; 
 	private DetectiveNote detectiveNote;
+	private GuessDialog makeGuessDialog; 
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenuItem displayDetectiveNote;
