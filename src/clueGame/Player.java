@@ -43,6 +43,10 @@ public abstract class Player {
 		return new Card();
 	}
 	
+	public void createSuggestion(ClueGame game, int roomIndex) {
+	
+	}
+		
 	// Getters and Setters:
 	public String getName(){
 		return name;

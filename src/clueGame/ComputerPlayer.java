@@ -26,7 +26,6 @@ public class ComputerPlayer extends Player {
 		super(name, color, startLoc, index); 
 		cardsSeen = new ArrayList<Card>();
 		// Index is the index of the human player within the array list of players created in the ClueGame
-		
 	}
 	
 	// Our pickLocation method requires a board object as well as a Set of Integers to be passed in as parameters. 
@@ -100,8 +99,6 @@ public class ComputerPlayer extends Player {
 		
 		weaponSuggestion = weaponList.get(rand.nextInt(weaponList.size())).getName();
 		personSuggestion = personList.get(rand.nextInt(personList.size())).getName();
-		
-		
 	}
 	
 	public void updateSeen(Card seen){

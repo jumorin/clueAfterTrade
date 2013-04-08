@@ -42,7 +42,7 @@ public class ClueGame extends JFrame {
 	private Solution answer;
 	private String peopleFile, weaponFile, roomFile; 
 	Board board; 
-	private DetectiveNote detecitveNote;
+	private DetectiveNote detectiveNote;
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenuItem displayDetectiveNote;
@@ -70,6 +70,7 @@ public class ClueGame extends JFrame {
 		this.weaponFile = weapons; 
 		loadConfigFiles(); 
 		board.addPlayers(players);
+		
 		// Create the human player
 		human = new HumanPlayer(players.get(0).getName(), players.get(0).getColor(), players.get(0).getStartLocation(), 0);
 		deal();
@@ -77,12 +78,12 @@ public class ClueGame extends JFrame {
 		this.setTitle("Clue Game");
 		menuBar = new JMenuBar();
 		menu = new JMenu("File");
-		displayDetectiveNote = new JMenuItem("Display Detective Notes");
 		
+		displayDetectiveNote = new JMenuItem("Display Detective Notes");
 		displayDetectiveNote.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					detecitveNote.setVisible(true);
+					detectiveNote.setVisible(true);
 	            }
 	        }
 		);
@@ -94,8 +95,8 @@ public class ClueGame extends JFrame {
 		this.setJMenuBar(menuBar);
 		this.setVisible(true);
 		this.setSize(new Dimension(720, 690));
-		detecitveNote = new DetectiveNote("CluePlayers.txt", "ClueRooms.txt", "ClueWeapons.txt");
-		detecitveNote.initialize();
+		detectiveNote = new DetectiveNote("CluePlayers.txt", "ClueRooms.txt", "ClueWeapons.txt");
+		detectiveNote.initialize();
 		this.setLayout(new BorderLayout());
 		
 		cardDisplay = new PlayerCardDisplay(players.get(0).getMyCards());
@@ -106,12 +107,12 @@ public class ClueGame extends JFrame {
 		this.setVisible(true);
 		this.addMouseListener(new ClickEvent());
 		
-		turn = players.size() -1;
+		turn = players.size() - 1;
 	}
 	
 	public void splashScreen(String humanName)
 	{
-		JOptionPane.showMessageDialog(this, "Welcome to Clue you are "+humanName+ ". Press Next Player to begin play.");
+		JOptionPane.showMessageDialog(this, "Welcome to Clue! You are "+humanName+ ". Press Next Player to begin play.");
 	}
 	
 	public void run()
@@ -135,7 +136,10 @@ public class ClueGame extends JFrame {
 		int currentLocation = players.get(turn).getCurrentLocation();
 		board.startTargets(currentLocation, rollValue);
 		players.get(turn).performTurn(rollValue, board, board.getTargets() );
-		
+				
+		//if ((turn != 0) && board.getCellAt(currentLocation).isRoom())
+			//WHERE SHOULD WE DO THIS?
+			//players.get(turn).createSuggestion(game, currentLocation); 		
 	}
 
 	// Deal the cards "randomly"
