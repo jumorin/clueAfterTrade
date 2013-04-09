@@ -1,5 +1,3 @@
-//John Aspinwall
-//Zachary Zembower
 package clueGame;
 
 public class BadConfigFormatException extends Exception {

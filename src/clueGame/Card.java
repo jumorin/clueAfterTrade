@@ -1,6 +1,5 @@
 package clueGame;
 
-
 public class Card {
 	
 	public enum CardType {ROOM, WEAPON, PERSON}

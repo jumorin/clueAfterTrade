@@ -1,5 +1,3 @@
-//John Aspinwall
-//Zachary Zembower
 package clueGame;
 
 import java.awt.Color;

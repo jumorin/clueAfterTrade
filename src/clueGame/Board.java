@@ -1,7 +1,4 @@
 package clueGame;
-//John Aspinwall
-//Zachary Zembower
-
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -177,6 +174,11 @@ public class Board extends JPanel {
 	
 	public Map<Character,String> getRooms() {
 		return rooms;
+	}
+	
+	public String getRoomByInitial(char c)
+	{
+		return rooms.get(c);
 	}
 	
 	public int getNumRows() {

@@ -13,6 +13,7 @@ public abstract class Player {
 	protected ArrayList<Card> myCards;
 	protected int currentLocation;
 	protected boolean selectedLocation;
+	protected boolean makingAccucusation; 
 
 	public Player() {
 		
@@ -22,9 +23,13 @@ public abstract class Player {
 	{
 		selectedLocation = arg;
 	}
+	public void setaMakingAccucusation(boolean arg)
+	{
+		makingAccucusation = arg;
+	}
 	
 	
-	public abstract void performTurn(int diceValue, Board board, Set<Integer> targets);
+	public abstract void performTurn(int diceValue, ClueGame game, Set<Integer> targets);
 	
 	public boolean canProceed()
 	{

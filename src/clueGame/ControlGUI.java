@@ -28,10 +28,10 @@ public class ControlGUI extends JPanel {
 		whoseTurnLabel = new JLabel("Whose turn?");
 		
 		// Buttons
-		
 		nextPlayerButton = new JButton("Next player");
 		nextPlayerButton.addActionListener(new ButtonListener());
 		makeAccusationButton = new JButton("Make an accusation");
+		makeAccusationButton.addActionListener(new ButtonListener());
 		add(nextPlayerButton);
 		add(makeAccusationButton);
 		
@@ -54,20 +54,20 @@ public class ControlGUI extends JPanel {
 		add(diePanel);
 		
 		guessPanel = new JPanel();
-		guessLabel = new JLabel("Guess");
+		//guessLabel = new JLabel("Guess");
 		guessPanel.setBorder((Border) new TitledBorder (new EtchedBorder(), "Guess"));
-		guessTextField = new JTextField(10);
+		guessTextField = new JTextField(16);
 		guessTextField.setEnabled(false); 
-		guessPanel.add(guessLabel);
+		//guessPanel.add(guessLabel);
 		guessPanel.add(guessTextField);
 		add(guessPanel);
 		
 		resultPanel = new JPanel();
-		resultLabel = new JLabel("Result");
+		//resultLabel = new JLabel("Result");
 		resultPanel.setBorder((Border) new TitledBorder (new EtchedBorder(), "Result"));
 		resultTextField = new JTextField(10);
 		resultTextField.setEnabled(false);
-		resultPanel.add(resultLabel);
+		//resultPanel.add(resultLabel);
 		resultPanel.add(resultTextField);
 		add(resultPanel);
 		
@@ -105,6 +105,10 @@ public class ControlGUI extends JPanel {
 			if(e.getSource() == nextPlayerButton)
 			{
 				game.performNextTurn();
+			}
+			else if(e.getSource() == makeAccusationButton) 
+			{
+				game.performAccusation(); 
 			}
 		}
 	}

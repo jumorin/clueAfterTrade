@@ -1,6 +1,5 @@
 package clueGame;
 
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
@@ -28,6 +27,12 @@ public class ComputerPlayer extends Player {
 		// Index is the index of the human player within the array list of players created in the ClueGame
 	}
 	
+	@Override
+	public void addCard(Card card){
+		myCards.add(card);
+		this.updateSeen(card);
+	}
+	
 	// Our pickLocation method requires a board object as well as a Set of Integers to be passed in as parameters. 
 	// This is because the original code set up the targets as a Set of Integers, instead of a set of Board Cells.
 	public BoardCell pickLocation(Board board, Set<Integer> targets){
@@ -53,52 +58,71 @@ public class ComputerPlayer extends Player {
 		return temp.get(rand.nextInt(temp.size()));
 	}
 	
-	public void createSuggestion(ClueGame game, int roomIndex){
-		char room = game.getBoard().getRoomCellAt(roomIndex).getInitial(); 
-		ArrayList<Card> personList = new ArrayList<Card>();
-		ArrayList<Card> weaponList = new ArrayList<Card>();
+	public void createSuggestion(ClueGame game){
+		char roomInitial = game.getBoard().getRoomCellAt(currentLocation).getInitial();
+		roomSuggestion = game.board.getRoomByInitial(roomInitial);
+		String personList = "";
+		String weaponList = "";
 		//each time a suggestion is created, all of the revealed cards are added to seen
 		for(Card c: game.getRevealed()){
 			if(!cardsSeen.contains(c))
 				cardsSeen.add(c);
 		}
 		
-		switch (room){
-		case 'C':roomSuggestion = "Conservatory";
-			break;
-		case 'K':roomSuggestion = "Kitchen";
-			break;
-		case 'B':roomSuggestion = "Ballroom";
-			break;
-		case 'R':roomSuggestion = "Billiard Room";
-			break;
-		case 'L':roomSuggestion = "Library";
-			break;
-		case 'S':roomSuggestion = "Study";
-			break;
-		case 'D':roomSuggestion = "Dining Room";
-			break;
-		case 'O':roomSuggestion = "Lounge";
-			break;
-		case 'H':roomSuggestion = "Hall";
-			break;
+		boolean temp = false;
+		int location = rand.nextInt(game.getDeck().size());
+		for(int j = 0; j < game.getDeck().size(); j++){
+			for(Card r: cardsSeen){
+				if(!game.getDeck().get(location).getName().equals(r.getName()) && !temp){
+					if(game.getDeck().get(location).getType() == CardType.PERSON)
+					{
+						personList = game.getDeck().get(location).getName();
+						break;
+					}
+				}
+			}
+			location = (location + 1) % game.getDeck().size();
 		}
 		
-		for(Card c: game.getDeck()){
-			boolean temp = false;
+		temp = false;
+		
+		location = rand.nextInt(game.getDeck().size());
+		for(int j = 0; j < game.getDeck().size(); j++){
 			for(Card r: cardsSeen){
-				if(!c.getName().equals(r.getName()) && !temp){
-					if(c.getType() == CardType.PERSON)
-						personList.add(c);
-					else if(c.getType() == CardType.WEAPON)
-						weaponList.add(c);
-					temp = true;
+				if(!game.getDeck().get(location).getName().equals(r.getName()) && !temp){
+					if(game.getDeck().get(location).getType() == CardType.WEAPON)
+					{
+						weaponList = game.getDeck().get(location).getName();
+						break;
+					}
+				}
+			}
+			location = (location + 1) % game.getDeck().size();
+		}
+		
+		if(weaponList.equals(""))
+		{
+			for(Card c: game.getDeck()){
+				if (c.getType() == CardType.WEAPON)
+				{
+					weaponList = c.getName();
+					break;
 				}
 			}
 		}
 		
-		weaponSuggestion = weaponList.get(rand.nextInt(weaponList.size())).getName();
-		personSuggestion = personList.get(rand.nextInt(personList.size())).getName();
+		if(personList.equals(""))
+		{
+			for(Card c: game.getDeck()){
+				if (c.getType() == CardType.PERSON)
+				{
+					personList = c.getName();
+					break;
+				}
+			}
+		}
+		weaponSuggestion = weaponList;
+		personSuggestion = personList;
 	}
 	
 	public void updateSeen(Card seen){
@@ -108,8 +132,6 @@ public class ComputerPlayer extends Player {
 				cardsSeen.add(c);
 				
 		}
-		
-		cardsSeen.add(seen);
 	}	
 	
 	// A setter to be used in the tests:
@@ -129,16 +151,43 @@ public class ComputerPlayer extends Player {
 		return roomSuggestion;
 	}
 
-	@Override
-	public void performTurn(int diceValue, Board board, Set<Integer> targets) 
+	private void makeAccusation(ClueGame game)
 	{
-		BoardCell cell = pickLocation(board, targets);
-		currentLocation = board.calcIndex(cell.locY, cell.locX);
-		if(board.getCellAt(currentLocation).isRoom())
+		String person = "";
+		String weapon = "";
+		String room = "";
+		
+		for (Card c : game.getDeck())
 		{
-			this.lastRoomVisited = board.getCellAt(currentLocation).getInitial();
+			if(!cardsSeen.contains(c))
+			{
+				if(c.getType() == CardType.PERSON)
+					person = c.getName(); 
+				else if(c.getType() == CardType.WEAPON)
+					weapon = c.getName(); 
+				else if(c.getType() == CardType.ROOM)
+					room = c.getName();
+			}
+		}
+		Solution s = new Solution(person, weapon, room);
+		game.checkAccusation(s, this);
+	}
+	
+	@Override
+	public void performTurn(int diceValue, ClueGame game, Set<Integer> targets) 
+	{
+		BoardCell cell = pickLocation(game.board, targets);
+		currentLocation = game.board.calcIndex(cell.locY, cell.locX);
+		if(game.board.getCellAt(currentLocation).isRoom())
+		{
+			this.lastRoomVisited = game.board.getCellAt(currentLocation).getInitial();
+			this.createSuggestion(game);
+			game.handleSuggestion(personSuggestion, roomSuggestion, weaponSuggestion, this);
 		}
 		
-		board.repaint();
+		if(cardsSeen.size() == (game.getDeck().size() - 3))
+		{
+			makeAccusation(game);
+		}
 	}
 }

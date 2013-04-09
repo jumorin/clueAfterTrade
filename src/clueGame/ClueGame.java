@@ -1,3 +1,6 @@
+// Luke Dunekacke
+// Julia Morin
+
 package clueGame;
 
 
@@ -49,6 +52,7 @@ public class ClueGame extends JFrame {
 	private JMenuItem displayDetectiveNote;
 	private PlayerCardDisplay cardDisplay;
 	private ControlGUI controlGUI;
+	private ClueGame gamePointer;
 
 	//Turn is index from 0-5
 	private int turn;
@@ -59,7 +63,7 @@ public class ClueGame extends JFrame {
 		board = new Board("ClueMap.csv","legend.txt");
 		this.add(board, BorderLayout.CENTER);
 
-		ArrayList<String> answer = new ArrayList<String>();
+		
 
 		cards = new ArrayList<Card>();
 		players = new ArrayList<Player>(); 
@@ -109,6 +113,7 @@ public class ClueGame extends JFrame {
 		this.addMouseListener(new ClickEvent());
 		
 		turn = players.size() - 1;
+		gamePointer = this;
 	}
 	
 	public void splashScreen(String humanName)
@@ -125,7 +130,7 @@ public class ClueGame extends JFrame {
 	{
 		if(!players.get(turn).canProceed())
 		{
-			JOptionPane.showMessageDialog(this, "Please Select a Target Location");
+			JOptionPane.showMessageDialog(this, "Please finish turn");
 			return;
 		}
 
@@ -136,11 +141,8 @@ public class ClueGame extends JFrame {
 		controlGUI.setDice(rollValue);
 		int currentLocation = players.get(turn).getCurrentLocation();
 		board.startTargets(currentLocation, rollValue);
-		players.get(turn).performTurn(rollValue, board, board.getTargets() );
-				
-		//if ((turn != 0) && board.getCellAt(currentLocation).isRoom())
-			//WHERE SHOULD WE DO THIS?
-			//players.get(turn).createSuggestion(game, currentLocation); 		
+		players.get(turn).performTurn(rollValue, this, board.getTargets() );
+		board.repaint();				
 	}
 
 	// Deal the cards "randomly"
@@ -148,11 +150,47 @@ public class ClueGame extends JFrame {
 		// Boolean arrays created to know when all the cards have been given to a player
 		boolean trueArray[] = new boolean[21];
 		boolean dealt[] = new boolean[21]; 
+		String ansPerson = ""; 
+		String ansWeapon = ""; 
+		String ansRoom = "";
 		
 		for (int i = 0; i < 21; i++) {
 			dealt[i] = false; 
 			trueArray[i] = true;
 		}
+		
+		boolean ansP = false;
+		boolean ansW = false;
+		boolean ansR = false;
+		int count = 0;
+		while(count < 3)
+		{
+			int temp = rand.nextInt(21);
+			Card c = cards.get(temp);
+			if(c.getType() == CardType.PERSON && !ansP)
+			{
+				ansPerson = c.getName();
+				ansP = true;
+				dealt[temp] = true;
+				count++;
+			}
+			else if(c.getType() == CardType.WEAPON && !ansW)
+			{
+				ansWeapon = c.getName();
+				ansW = true;
+				dealt[temp] = true;
+				count++;
+			}
+			else if(c.getType() == CardType.ROOM && !ansR)
+			{
+				ansRoom = c.getName();
+				ansR = true;
+				dealt[temp] = true;
+				count++;
+			}
+		}
+		
+		answer = new Solution(ansPerson, ansWeapon, ansRoom);
 
 		// While there are still cards to deal, continue choosing random cards and 
 		// giving them to one of the six players
@@ -270,7 +308,7 @@ public class ClueGame extends JFrame {
 	}
 
 	// Determines whether a suggestion is plausible or not
-	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson){
+	public void handleSuggestion(String person, String room, String weapon, Player accusingPerson){
 		int start = rand.nextInt(5);
 		ArrayList<Card> temp = new ArrayList<Card>();
 		boolean cardFound = false;
@@ -298,19 +336,57 @@ public class ClueGame extends JFrame {
 			start++;
 		}
 		
+		for (int playerIndex = 0; playerIndex < 6; playerIndex++) 
+			if (players.get(playerIndex).getName().equals(person))
+				players.get(playerIndex).setStartLocation(accusingPerson.getCurrentLocation()); 
+		
 		if (temp.size() != 0) {
 			Card reveal = temp.get(rand.nextInt(temp.size()));
 			revealed.add(reveal);
-			return reveal;
-		} else 
-			return null; 
+			for(int i = 1; i < players.size(); i++)
+			{
+				ComputerPlayer c =(ComputerPlayer)players.get(i);
+				c.updateSeen(reveal);
+			}
+			controlGUI.setResult(reveal.getName());
+			controlGUI.setGuess(person, weapon, room);
+		}
+		else
+		{
+			controlGUI.setGuess(person, weapon, room);
+			controlGUI.setResult("No New Clue");
+		}
+		board.repaint();
+				
 	}
 
-	public boolean checkAccusation(Solution solution){
+	public boolean checkAccusation(Solution solution, Player p){
 		if(answer.equals(solution))
+		{
+			JOptionPane.showMessageDialog(this, "CONGRATS " + p.getName() + "!! You win!");
+			board.repaint();
 			return true;
+		}
 		else
+		{
+			JOptionPane.showMessageDialog(this, "Sorry " + p.getName() + ". That is incorrect");
+			board.repaint();
 			return false;
+		}
+	}
+	
+	public void performAccusation() 
+	{
+		System.out.println("HERE");
+		if(turn == 0)
+		{
+			players.get(0).setaMakingAccucusation(true);
+			AccusationDialog ad = new AccusationDialog(cards, players.get(0),this);
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(this, "Please wait until your turn.");
+		}
 	}
 	
 	public void drawBoard()
@@ -425,19 +501,34 @@ public class ClueGame extends JFrame {
 		public void mouseReleased(MouseEvent e) {
 			if (turn == 0)
 			{
+				boolean enteredRoom = false;
 				int column = mapXLocation(e.getX());
 				int row = mapYLocation(e.getY());
-				System.out.println(row);
 
 				if(board.isValidLocation(row, column))
 				{
 					players.get(0).setStartLocation(board.calcIndex(row, column));
-					players.get(0).setSelectedLocation(true);
+					if(board.getCellAt(board.calcIndex(row, column)).isRoom())
+					{
+						enteredRoom = true;
+						String roomName = board.getRoomByInitial(board.getRoomCellAt(board.calcIndex(row, column)).getInitial());
+						GuessDialog guess = new GuessDialog(cards, roomName, players.get(0),gamePointer );
+						
+					}
+					
 					for(Integer i : board.getTargets())
 					{
 						board.getCellAt(i).setHighlight(false);
 					}
+					if (enteredRoom)
+						players.get(0).setSelectedLocation(false);
+					else
+						players.get(0).setSelectedLocation(true);
 					board.repaint();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Invalid target.");
 				}
 			}
 			

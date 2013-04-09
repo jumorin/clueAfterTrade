@@ -9,22 +9,23 @@ public class HumanPlayer extends Player {
 		super(name, color, startLoc, index); 
 		// Index is the index of the human player within the array list of players created in the ClueGame
 		selectedLocation = false;
+		makingAccucusation = false;
 	}
 	
 	@Override
 	public boolean canProceed()
 	{
-		return selectedLocation;
+		return (selectedLocation && !makingAccucusation);
 	}
 
 	@Override
-	public void performTurn(int diceValue, Board board, Set<Integer> targets) {
+	public void performTurn(int diceValue,  ClueGame game, Set<Integer> targets) {
 		// only part1
 		selectedLocation = false;
 		for(Integer i : targets)
 		{
-			board.getCellAt(i).setHighlight(true);
+			game.board.getCellAt(i).setHighlight(true);
 		}
-		board.repaint();
+		game.board.repaint();
 	}
 }

@@ -17,32 +17,30 @@ import javax.swing.border.LineBorder;
 
 import clueGame.Card.CardType;
 
-public class GuessDialog extends JDialog {
+public class AccusationDialog extends JDialog {
 	
 	// Features of the Guess Dialog Box:
 	private JLabel room, person, weapon;
-	private JComboBox personGuess, weaponGuess;
-	private JLabel roomGuess;
+	private JComboBox roomGuess, personGuess, weaponGuess;
 	private Player player;
 	private JButton submit, cancel;
 	private ClueGame game;
 	
 	// Constructor for a new GuessDialog:
-	public GuessDialog(ArrayList<Card> deck, String currentRoom, Player player, ClueGame game) {
-		roomGuess = new JLabel(currentRoom);
+	public AccusationDialog(ArrayList<Card> deck, Player player, ClueGame game) {
 		this.player = player;
 		this.setLayout(new GridLayout(4,2)); 
 		this.game = game;
+		
 		room = new JLabel("Room: ");
 		person = new JLabel("Person: "); 
 		weapon = new JLabel("Weapon: "); 
 		
-		//** Need to set the roomGuess to the current room location
-				
+		roomGuess = new JComboBox();		
 		personGuess = new JComboBox(); 
 		weaponGuess = new JComboBox();
 		
-		submit = new JButton("Suggest"); 
+		submit = new JButton("Accuse"); 
 		submit.addActionListener(new ButtonListener()); 
 		cancel = new JButton("Cancel"); 
 		cancel.addActionListener(new ButtonListener());
@@ -57,6 +55,10 @@ public class GuessDialog extends JDialog {
 			else if(c.getType() == CardType.PERSON)
 			{
 				personGuess.addItem(c.getName());
+			}
+			else if(c.getType() == CardType.ROOM)
+			{
+				roomGuess.addItem(c.getName());
 			}
 		}
 		
@@ -77,13 +79,14 @@ public class GuessDialog extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == submit) {
-				player.setSelectedLocation(true);
-				game.handleSuggestion((String)personGuess.getSelectedItem(), roomGuess.getText(), (String)weaponGuess.getSelectedItem(), player);
+				player.setaMakingAccucusation(false);
+				Solution temp = new Solution((String)personGuess.getSelectedItem(), (String)roomGuess.getSelectedItem(), (String)weaponGuess.getSelectedItem());
+				game.checkAccusation(temp, player);
 				dispose();
 			}
 			
 			else if (e.getSource() == cancel) {
-				player.setSelectedLocation(true);
+				player.setaMakingAccucusation(false);
 				dispose();
 			}
 		}

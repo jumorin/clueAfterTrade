@@ -1,3 +1,4 @@
+/*
 package clueTests;
 
 import static org.junit.Assert.*;
@@ -326,3 +327,6 @@ public class GameActionTests {
 		Assert.assertNotSame("Professor Plum", computer.getPersonSuggestion());
 	}
 }
+
+
+*/
